@@ -56,7 +56,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
   <PropertyGroup>
-    <PostBuildEvent>cp -f "$(TargetPath)" "$(ProjectDir)\..\release\"</PostBuildEvent>
-  </PropertyGroup>
+   <PostBuildEventDependsOn>
+     $(PostBuildEventDependsOn);
+     PostBuildMacros;
+   </PostBuildEventDependsOn>    
+   </PropertyGroup>
+     <Target Name="PostBuildMacros">
+          <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+                   <Output TaskParameter="Assemblies" ItemName="Targets" />
+           </GetAssemblyIdentity>
+           <ItemGroup>
+                <VersionNumber Include="@(Targets->'%(Version)')"/>
+           </ItemGroup>
+       </Target>
+   <PropertyGroup>
+     <PostBuildEvent>
+         mkdir -p "$(ProjectDir)\..\release\@(VersionNumber)\"
+         cp -f "$(TargetPath)" "$(ProjectDir)\..\release\@(VersionNumber)\"
+     </PostBuildEvent>
+   </PropertyGroup>
 </Project>
