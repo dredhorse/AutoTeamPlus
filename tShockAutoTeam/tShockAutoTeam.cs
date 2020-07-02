@@ -26,7 +26,7 @@ namespace tShockAutoTeam
 
         public override Version Version
         {
-            get { return new Version(1, 0); }
+            get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; }
         }
 
         public tShockAutoTeam(Main game) : base(game)
